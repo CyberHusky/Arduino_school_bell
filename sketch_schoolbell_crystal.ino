@@ -105,10 +105,19 @@ void setup() {
   //myOLED.begin();
   //myOLED.setFont(SmallFont);
 
-  delay(10);
+  //delay(10);
 
+
+// -- запускати лише разово для синхронізації часу! --
+  //my_clock_set(); // разово синхронізує час і додає 11 сек для точності
+  
   //Serial.println("set time!");
   //clock.setDateTime(__DATE__, __TIME__); // запускаємо разово, коли треба синхронізувати час
+  //dt = clock.convertStringToDateTime(__DATE__, __TIME__);
+  //dt = addSeconds(dt, 13);  // додали 13 секунд
+  //clock.setDateTime(dt);
+// --
+
 
 
 /*
@@ -146,11 +155,11 @@ void loop() {
   Serial.print(dt.hour);   Serial.print(":");
   Serial.print(dt.minute); Serial.print(":");
   Serial.print(dt.second); Serial.println("");
-  Serial.println(dt.dayOfWeek);
+  //Serial.println(dt.dayOfWeek);
 
   delay(1000);
 
-  Serial.println("HEY!");
+  //Serial.println("HEY!");
   //char str_hour[]   = dt.hour;
   String str_hour   = String(dt.hour,DEC);
   String str_minute = String(dt.minute,DEC);
@@ -206,4 +215,33 @@ void play_short_sound(){
     tone(buzzer_pin, NOTE_A5, 300);   // 300 мс звучання
     delay(500);              // 200 мс пауза
   }
+}
+
+// Синхронізує час і додає ще 11 секунд
+void my_clock_set(){
+  int hour, minute, second;
+  sscanf(__TIME__, "%d:%d:%d", &hour, &minute, &second);
+  second += 11;
+  if (second >= 60) {
+    second -= 60;
+    minute++;
+    if (minute >= 60) {
+      minute = 0;
+      hour++;
+      if (hour >= 24) hour = 0;
+    }
+  }
+
+  // Розбір дати
+  char monthStr[4];
+  int day, year, month = 0;
+  sscanf(__DATE__, "%s %d %d", monthStr, &day, &year);
+  const char* months[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+  for (int i = 0; i < 12; i++) {
+    if (strncmp(monthStr, months[i], 3) == 0) month = i + 1;
+  }
+
+  clock.setDateTime(year, month, day, hour, minute, second);
+  Serial.println("RTC синхронізовано з +11 секунд");
+
 }
