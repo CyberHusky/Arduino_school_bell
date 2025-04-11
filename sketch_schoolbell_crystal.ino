@@ -23,7 +23,8 @@ RTCDateTime dt;
 // ===== Global Variables ======
 char weekDay[][4] = {"Mon","Tue","Wed","Thu","Fri",};
 
-String times_bell[] = {"8:0:0", "8:45:0", "8:55:0", "9:40:0", "9:50:0", "10:35:0", "10:45:0", "11:30:0", "11:50:0", "12:35:0", "12:50:0", "13:35:0", "13:45:0", "14:30:0", "14:40:0", "15:25:0", "20:59:20"};
+String times_bell[] = {"9:0:0", "9:45:0", "10:0:0", "10:45:0", "11:0:0", "11:45:0", "12:0:0", "12:45:0", "14:0:0", "14:45:0", "15:0:0", "15:45:0", "16:0:0", "16:45:0", "17:0:0", "17:45:0"};
+String pre_times_bell[] = {"9:40:0", "10:40:0", "11:40:0", "12:40:0", "13:40:0", "14:40:0", "15:40:0", "16:40:0", "17:40:0"};
 
 const int buzzer_pin = 2;
 
@@ -165,7 +166,14 @@ void loop() {
       Serial.println("Play music");
       //myDFPlayer.play(1);
       play_sound();
+    }
+  }
 
+  for (int i = 0; i < (sizeof(pre_times_bell) / sizeof(pre_times_bell[0])); i++){
+    if (strcmp(pre_times_bell[i].c_str(), str_time_now.c_str()) == 0 && (dt.dayOfWeek == 1 || dt.dayOfWeek == 2 || dt.dayOfWeek == 3 || dt.dayOfWeek == 4 || dt.dayOfWeek == 5) ){
+      Serial.println("Play music");
+      //myDFPlayer.play(1);
+      play_short_sound();
     }
     
   }
