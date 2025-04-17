@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 #include <Arduino.h>
-//#include <DFRobotDFPlayerMini.h> // библиотека для mp3 плеера
+#include <DFRobotDFPlayerMini.h> // библиотека для mp3 плеера
 #include "DS3231.h" // RTC библиотека, для "real time clock" - часы реального времени(дословно)
 #include <Wire.h> // 5 и 6-е строки для OLED дисплеев, библиотека занимает очень много места, так что временно убрали идею с олед.
 //#include <OLED_I2C.h>//
@@ -13,8 +13,8 @@
 //extern uint8_t MediumNumbers[];
 //extern uint8_t BigNumbers[];
 
-//SoftwareSerial speaker(10, 11); // RX, TX
-//DFRobotDFPlayerMini myDFPlayer;
+SoftwareSerial speaker(10, 11); // RX, TX
+DFRobotDFPlayerMini myDFPlayer;
 
 DS3231 clock;
 RTCDateTime dt;
@@ -90,9 +90,9 @@ void setup() {
   Wire.begin();        // Ініціалізація I2C
   clock.begin();       // Якщо бібліотека це підтримує
 
-  //speaker.begin(9600);
-  //speaker.listen();    
-/*
+  speaker.begin(9600);
+  speaker.listen();    
+
   if (!myDFPlayer.begin(speaker)) {  //Использование библиотеки softwareSerial для связи с mp3.
     Serial.println(F("Unable to begin:"));
     Serial.println(F("1.Please recheck the connection of RX/TX in speaker!"));
@@ -100,7 +100,18 @@ void setup() {
     while(true);
   }
   Serial.println(F("DFPlayer Mini online."));
-*/
+
+
+  myDFPlayer.volume(25);      //Установка громкости. Значения от 0 до 30
+  //myDFPlayer.volumeUp();    //Повышение Громкости
+  //myDFPlayer.volumeDown();
+  Serial.println("Let's play 1 music!");
+  myDFPlayer.play(1);       //Воспроизведение первого и единственного mp3 файла
+  //delay(23000);
+  //myDFPlayer.enableLoop();
+  //myDFPlayer.loop(2);  
+  //myDFPlayer.disableLoop();
+  //myDFPlayer.pause();
 
   //myOLED.begin();
   //myOLED.setFont(SmallFont);
@@ -120,20 +131,11 @@ void setup() {
 
 
 
-/*
-  myDFPlayer.volume(5);      //Установка громкости. Значения от 0 до 30
-  //myDFPlayer.volumeUp();    //Повышение Громкости
-  //myDFPlayer.volumeDown();
-  Serial.println("Let's play 1 music!");
-  //myDFPlayer.play(1);       //Воспроизведение первого и единственного mp3 файла
-  //delay(23000);
-  //myDFPlayer.enableLoop();
-  //myDFPlayer.loop(2);  
-  //myDFPlayer.disableLoop();
-  //myDFPlayer.pause();
+
+
 
   Serial.println("Let's begin!");
-*/
+
 
 
 // testing.... Mr. Freeman
